@@ -4,7 +4,7 @@ scikit-learn
 xgboost
 shap
 statsmodels
+scipy
 matplotlib
 seaborn
 openpyxl
-holidays
