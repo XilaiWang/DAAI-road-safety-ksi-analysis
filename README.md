@@ -27,6 +27,12 @@ A reproducible data‑analysis project (Warwick MSc, IB94V0) on UK road‑collis
 | Official multi‑year STATS19 collisions | `data/stats19_collisions_2015_2024_subset.csv` (derived subset) | https://www.gov.uk/government/statistics/road-safety-data |
 | LTLA→UTLA (district→county) lookup | `data/LAD17_CTYUA17_EW_LU.csv` | https://geoportal.statistics.gov.uk/ |
 
+### Other this‑case files (downloaded during the project, not read by the final notebook)
+- `data/_exploration_extra/ras-all-tables-excel/` — DfT *Reported road casualty statistics* published summary tables (RAS series); useful for the official KSI scale/trend and as a citation source.
+- `docs/Road_safety_statistics_guidance_GOV.UK.pdf` — DfT STATS19 definitions/methodology guidance (reference for the KSI definition).
+- **Full STATS19 microdata (1.4 GB) is *not* in the repo** — it exceeds GitHub's 100 MB per‑file limit; `data/stats19_collisions_2015_2024_subset.csv` is the derived subset the analysis uses (regenerate the full file from the Road‑safety‑data link above).
+- *(The generic ONS NSPCL postcode lookup, ~0.5 GB, was downloaded during a detour that the analysis ultimately did not use, so it is omitted to keep the repo lean — available on request.)*
+
 ## Notebook structure
 Setup → authenticity check → target + leakage defence → IMD join (coverage waterfall) → cleaning → EDA → feature selection + VIF → models (logistic/tree/RF/XGBoost, out‑of‑time 2021→2022, GroupKFold‑by‑LAD) → calibration + cost‑based threshold + confusion matrix → SHAP → distributional audit + cluster‑robust nested logit → **§12.6 exposure denominator** → k‑means → conclusions → sensitivity → **§17 robustness extension (multi‑year + LSOA, official STATS19)** → AI disclosure & references.
 
