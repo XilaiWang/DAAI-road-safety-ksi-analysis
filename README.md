@@ -27,11 +27,33 @@ A reproducible data‑analysis project (Warwick MSc, IB94V0) on UK road‑collis
 | Official multi‑year STATS19 collisions | `data/stats19_collisions_2015_2024_subset.csv` (derived subset) | https://www.gov.uk/government/statistics/road-safety-data |
 | LTLA→UTLA (district→county) lookup | `data/LAD17_CTYUA17_EW_LU.csv` | https://geoportal.statistics.gov.uk/ |
 
-### Other this‑case files (downloaded during the project, not read by the final notebook)
-- `data/_exploration_extra/ras-all-tables-excel/` — DfT *Reported road casualty statistics* published summary tables (RAS series); useful for the official KSI scale/trend and as a citation source.
-- `docs/Road_safety_statistics_guidance_GOV.UK.pdf` — DfT STATS19 definitions/methodology guidance (reference for the KSI definition).
-- **Full STATS19 microdata (1.4 GB) is *not* in the repo** — it exceeds GitHub's 100 MB per‑file limit; `data/stats19_collisions_2015_2024_subset.csv` is the derived subset the analysis uses (regenerate the full file from the Road‑safety‑data link above).
-- *(The generic ONS NSPCL postcode lookup, ~0.5 GB, was downloaded during a detour that the analysis ultimately did not use, so it is omitted to keep the repo lean — available on request.)*
+### Other this‑case files included
+- `data/_exploration_extra/ras-all-tables-excel/` — DfT *Reported road casualty statistics* (RAS) published summary tables; used for the official KSI scale/trend and as a citation source.
+- `docs/Road_safety_statistics_guidance_GOV.UK.pdf` — DfT STATS19 definitions/methodology guidance (source for the KSI definition).
+
+## Two large datasets deliberately NOT committed — why, and how I reduced the data
+Both are this‑case datasets, but left out of the repo for the reasons below. Each has a download link, and the reduction is reproducible, so the analysis stays fully reproducible.
+
+### 1. Full STATS19 collision microdata — 1.4 GB (blocked by GitHub's file‑size limit)
+- **Why not committed:** the official file `dft-road-casualty-statistics-collision-1979-latest-published-year.csv` is **9,015,100 rows × 44 columns (1979–2024) ≈ 1.4 GB** — far over GitHub's **100 MB per‑file hard limit** (free Git LFS quota is also < 1.4 GB).
+- **How I cleaned it down to only what I need** → committed as `data/stats19_collisions_2015_2024_subset.csv` (≈ 29 MB). The §17 robustness extension uses only **4 of the 44 columns** and only the **2015–2024** rows (the analysis window), so I dropped the rest:
+  ```python
+  import pandas as pd
+  df = pd.read_csv("dft-road-casualty-statistics-collision-1979-latest-published-year.csv",
+                   usecols=["collision_year", "collision_severity",
+                            "local_authority_ons_district", "lsoa_of_accident_location"],
+                   low_memory=False)
+  df = df[(df.collision_year >= 2015) & (df.collision_year <= 2024)]
+  df.to_csv("data/stats19_collisions_2015_2024_subset.csv", index=False)
+  # 9,015,100 -> 1,150,305 rows | 44 -> 4 columns | 1.4 GB -> 29 MB (identical results)
+  ```
+- **Download the full file:** https://www.gov.uk/government/statistics/road-safety-data (file *"Road Safety Data — Collisions 1979 – Latest Published Year"*).
+
+### 2. ONS NSPCL postcode lookup — ~0.5 GB (left out as unused)
+- **Why not committed:** a **generic national postcode→geography lookup** (124 CSVs, ≈ 496 MB) downloaded during an exploratory detour to map crash districts to counties. It turned out **not to carry an upper‑tier county field**, so the analysis never used it — the district→county mapping comes from the small `data/LAD17_CTYUA17_EW_LU.csv` instead. Committing ~0.5 GB of unused data would only bloat the repo with no analytical value.
+- **Download if needed:** ONS Open Geography Portal — https://geoportal.statistics.gov.uk/ (search *"NSPCL"* / National Statistics Postcode Lookup).
+
+> The data kept in `data/` is further cleaned inside the notebook: **§6 documents every missing‑value / sentinel‑recode / de‑duplication / England‑scope decision with its reasoning** (e.g. dropping `Carriageway_Hazards` at 98% missing, recoding "unknown" sentinels to NaN, de‑duplicating on whole rows rather than the Excel‑corrupted `Accident_Index`).
 
 ## Notebook structure
 Setup → authenticity check → target + leakage defence → IMD join (coverage waterfall) → cleaning → EDA → feature selection + VIF → models (logistic/tree/RF/XGBoost, out‑of‑time 2021→2022, GroupKFold‑by‑LAD) → calibration + cost‑based threshold + confusion matrix → SHAP → distributional audit + cluster‑robust nested logit → **§12.6 exposure denominator** → k‑means → conclusions → sensitivity → **§17 robustness extension (multi‑year + LSOA, official STATS19)** → AI disclosure & references.
