@@ -1,0 +1,29 @@
+# Raw data — NOT committed (large; download via links in README)
+*.csv
+*.xlsx
+*.xls
+*.ods
+*.zip
+*.dmg
+*.shp
+*.geojson
+data/
+**/Road Accident dataset/
+**/Brazilian E-Commerce*/
+**/NSPCL_*/
+**/ras-all-tables*/
+dft-road-casualty-statistics-*.csv
+local_authority_traffic.csv
+File_*.csv
+File_*.xlsx
+LAD17_CTYUA17_EW_LU.csv
+
+# Notebook / Python cruft
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
