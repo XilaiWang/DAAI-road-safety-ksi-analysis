@@ -2,7 +2,7 @@
 
 A reproducible data‑analysis project (Warwick MSc, IB94V0) on UK road‑collision severity, joined to area deprivation (IMD) and traffic exposure, written as a first‑person *discovery* notebook.
 
-> **Note:** large raw datasets are **not** committed (see `.gitignore`); download links are below. The notebook documents the full analytical flow end‑to‑end.
+> **Self‑contained & reproducible:** the datasets used are bundled under [`data/`](data/) and the notebook reads them via a relative path (`BASE = ./data`), so it runs after a clone with no extra downloads. The one exception is the official STATS19 microdata — the full file is 1.4 GB (over GitHub's 100 MB limit), so `data/stats19_collisions_2015_2024_subset.csv` is a **derived subset** (the 4 columns + 2015–2024 rows the §17 robustness extension uses); regenerate from the full file via the link below.
 
 ## Business framing
 - **Decision‑maker:** a regional road‑safety / public‑health team deciding where to target finite **KSI** (Killed‑or‑Seriously‑Injured, the official DfT outcome) prevention resources.
@@ -16,17 +16,16 @@ A reproducible data‑analysis project (Warwick MSc, IB94V0) on UK road‑collis
 
 ## How to run
 1. `pip install -r requirements.txt`
-2. Download the datasets below and set `BASE` (top of the notebook) to the folder holding them.
-3. Run all cells (`jupyter nbconvert --to notebook --execute road_safety_severity_analysis.ipynb`).
+2. Just run all cells — data is bundled in `data/` and read relatively (`jupyter nbconvert --to notebook --execute road_safety_severity_analysis.ipynb`).
 
-## Data sources (download separately — gitignored)
-| Dataset | Source |
-|---|---|
-| Road Accident Dataset (primary, 2021–22) | https://www.kaggle.com/datasets/xavierberge/road-accident-dataset |
-| English Indices of Deprivation 2019 (IMD) — File_7 (LSOA) & File_10 (LAD) | https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019 |
-| DfT local‑authority traffic (vehicle‑miles) | https://roadtraffic.dft.gov.uk/downloads |
-| Official multi‑year STATS19 collisions (1979–2024) + Data Guide | https://www.gov.uk/government/statistics/road-safety-data |
-| LTLA→UTLA (district→county) lookup | ONS Open Geography Portal — https://geoportal.statistics.gov.uk/ |
+## Data (bundled in `data/`; original sources below)
+| Dataset | In repo | Source |
+|---|---|---|
+| Road Accident Dataset (primary, 2021–22) | `data/Road Accident Data.csv` | https://www.kaggle.com/datasets/xavierberge/road-accident-dataset |
+| English Indices of Deprivation 2019 (IMD) — File_7 (LSOA) & File_10 (LAD) | `data/File_7_*.csv`, `data/File_10_*.xlsx` | https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019 |
+| DfT local‑authority traffic (vehicle‑miles) | `data/local_authority_traffic.csv` | https://roadtraffic.dft.gov.uk/downloads |
+| Official multi‑year STATS19 collisions | `data/stats19_collisions_2015_2024_subset.csv` (derived subset) | https://www.gov.uk/government/statistics/road-safety-data |
+| LTLA→UTLA (district→county) lookup | `data/LAD17_CTYUA17_EW_LU.csv` | https://geoportal.statistics.gov.uk/ |
 
 ## Notebook structure
 Setup → authenticity check → target + leakage defence → IMD join (coverage waterfall) → cleaning → EDA → feature selection + VIF → models (logistic/tree/RF/XGBoost, out‑of‑time 2021→2022, GroupKFold‑by‑LAD) → calibration + cost‑based threshold + confusion matrix → SHAP → distributional audit + cluster‑robust nested logit → **§12.6 exposure denominator** → k‑means → conclusions → sensitivity → **§17 robustness extension (multi‑year + LSOA, official STATS19)** → AI disclosure & references.

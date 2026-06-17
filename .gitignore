@@ -1,22 +1,14 @@
-# Raw data — NOT committed (large; download via links in README)
-*.csv
-*.xlsx
-*.xls
-*.ods
+# Project data IS committed under data/ (see README).
+# But never commit the full 1.4GB STATS19 file (>GitHub 100MB limit) — only the derived subset.
+dft-road-casualty-statistics-collision-1979-latest-published-year.csv
+**/dft-road-casualty-statistics-collision-1979-latest-published-year.csv
+
+# Stray large archives / other-project data (defensive)
 *.zip
 *.dmg
-*.shp
-*.geojson
-data/
-**/Road Accident dataset/
-**/Brazilian E-Commerce*/
-**/NSPCL_*/
-**/ras-all-tables*/
-dft-road-casualty-statistics-*.csv
-local_authority_traffic.csv
-File_*.csv
-File_*.xlsx
-LAD17_CTYUA17_EW_LU.csv
+Brazilian E-Commerce*/
+NYC_*.csv
+PLUTO*.csv
 
 # Notebook / Python cruft
 .ipynb_checkpoints/
