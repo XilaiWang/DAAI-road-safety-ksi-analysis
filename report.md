@@ -3,7 +3,7 @@
 ## 1. Business problem
 - **The problem.** UK road‑safety teams and motor‑insurance risk managers share a resource‑allocation problem: local authorities must prioritise a limited Killed‑or‑Seriously‑Injured (KSI) prevention budget, while insurers must identify road contexts likely to generate high‑cost bodily‑injury exposure — and neither can review every context.
 - **Why it matters / real pain point.** KSI collisions impose large social costs on public bodies and high severe‑claim exposure on insurers, yet review capacity is limited, so misdirected effort wastes scarce resources and leaves preventable serious injuries unaddressed.
-- **Framed as analytics.** The project delivers a triage and ranking signal — not a real‑time crash predictor, an enforcement tool, or an insurance‑pricing model — to rank road contexts and areas for review, prevention, insurer loss‑prevention advice and public–private partnerships.
+- **Framed as analytics.** The project delivers a triage and ranking signal — not a real‑time crash predictor, an enforcement tool, an insurance‑pricing model, or a causal / DiD evaluation — to rank road contexts and areas for review, prevention, insurer loss‑prevention advice and public–private partnerships.
 - **Stakeholders.** These span road‑safety partnerships and local‑authority highway teams (budgets/review queues), highway engineers and transport planners (delivery), motor/fleet insurers and risk managers (territorial risk awareness and loss‑prevention, not pricing), and budget/partnership holders — at the interface of public‑safety allocation and commercial road‑risk management.
 
 ## 2. Dataset
@@ -21,7 +21,7 @@
 
 ## 4. Analysis
 - **Leakage control.** Post‑crash fields (severity, casualty/vehicle counts) and place‑memorising coordinates were excluded as unavailable when teams prioritise; their near‑chance AUCs (0.528 and 0.424) confirmed little predictive loss.
-- **Methods.** This is a **binary classification** problem: dependent variable `KSI` (1 = killed/seriously‑injured, 0 = slight); independent variables are at‑scene road/environment/time fields. A binary outcome with mixed categorical/numeric predictors makes **logistic regression** (interpretable) and **XGBoost** (strong tabular benchmark) natural; a decision tree, k‑NN and a random forest are compared. XGBoost was tuned by randomised search on 2021 (gain +0.002), and k‑means segments added as predictors gave no lift.
+- **Methods.** This is a **binary classification** problem: dependent variable `KSI` (1 = killed/seriously‑injured, 0 = slight); independent variables are at‑scene road/environment/time fields. A binary outcome with mixed categorical/numeric predictors makes **logistic regression** (interpretable) and **XGBoost** (strong benchmark) natural; a decision tree, k‑NN and random forest are compared. XGBoost was tuned by randomised search on 2021 (gain +0.002), and k‑means segments added as predictors gave no lift.
 - **Validation that mirrors deployment.** Models were trained on 2021 and tested once on 2022 (out‑of‑time); GroupKFold‑by‑authority was a spatial‑leakage and stability diagnostic; the model and threshold were chosen on a 2021 validation split only.
 - **Interpretation and equity.** Probabilities were calibrated; a cost‑based threshold reflected the higher cost of a missed KSI; SHAP explained drivers; clustering cross‑checked segments; and a cluster‑robust nested logistic regression with a vehicle‑mile exposure denominator addressed equity.
 
@@ -34,7 +34,7 @@
 
 ## 6. Business insights and recommendations
 - **Insight.** Where serious harm concentrates depends on the question asked: raw density favours urban cores, but exposure‑adjusted burden reveals which areas bear disproportionate harm per mile — relevant to public prioritisation and insurer territorial risk awareness.
-- **Actions.** Public bodies should use it as a triage signal (not an automatic rule): prioritise high‑speed rural contexts for engineering/speed/lighting review and deprived/high‑exposure urban areas for traffic‑calming and vulnerable‑user protection, with the threshold set to review capacity. Insurers use the same ranking for loss‑prevention, fleet‑risk and reserving awareness — not pricing. Illustratively, screening 10,000 contexts could surface ~580 KSI‑risk cases and, at a 5% effect, avoid ~29 KSI outcomes.
+- **Actions.** Public bodies should use it as a triage signal (not an automatic rule): prioritise high‑speed rural contexts for engineering/speed/lighting review and deprived/high‑exposure urban areas for traffic‑calming and vulnerable‑user protection, threshold set to review capacity. Insurers use the same ranking for loss‑prevention, fleet‑risk and reserving awareness — not pricing. Illustratively, of 10,000 contexts ~580 KSI‑risk cases are captured; at a 5% effect, ~29 KSI outcomes avoided.
 - **Limitations.** Observational data (associations, not causal); exposure is motor‑vehicle only; deprivation is area‑level (ecological‑fallacy risk, reduced not eliminated by an LSOA check); performance suits prioritisation, not precise prediction.
 - **Future enhancements.** Adding road‑geometry, traffic‑flow and pedestrian/cyclist exposure, top‑k targeting, and intervention‑rollout data for quasi‑experimental estimates would strengthen it.
 
