@@ -17,7 +17,7 @@
 - **Missing values and outliers.** Listwise deletion removed only the 1,154 rows (~0.4%) lacking core fields; their KSI rate (10.1%) was close to retained rows (14.3%), confirming negligible bias; imputation would invent crash‑scene conditions.
 - **Duplicates and corruption.** Whole‑row de‑duplication was applied; the corrupted `Accident_Index` (36% mangled by Excel) was never used as a key.
 - **Feature engineering.** An hour‑of‑day feature was parsed from the separate `Time` field, nominal contexts were dummy‑encoded, and a VIF check (≈1.00) confirmed no multicollinearity.
-- **External data — what, why, how.** Three external sources were joined: IMD 2019 (by authority name), DfT vehicle‑miles (by ONS code via a district→county lookup), and multi‑year STATS19 (2015–2024) — to measure equity and convert raw counts into exposure‑adjusted burden; coverage was a transparent waterfall (88.3% England‑matched).
+- **External data - what, why, how.** Four external sources were joined: IMD 2019 (by authority name), DfT vehicle-miles (by ONS code), multi-year STATS19 (2015-2024), and DfT hospital drive-times (JTS0506) - for equity, exposure-adjustment, and emergency-care access; coverage was a transparent waterfall (88.3% England-matched).
 
 ## 4. Analysis
 - **Leakage control.** Post‑crash fields (severity, casualty/vehicle counts) and place‑memorising coordinates were excluded as unavailable when teams prioritise; their near‑chance AUCs (0.528 and 0.424) confirmed little predictive loss.
@@ -30,11 +30,14 @@
 - **Operating point.** At a 5:1 false‑negative:false‑positive cost the model recalls ~40% of KSI contexts (precision ~20%), rising to ~91% at 10:1 — a transparent budget lever.
 - **Severity drivers.** SHAP and both clusterings agree that high speed limits, rural settings and poor lighting raise predicted severity — a fast (~62 mph) rural cluster has the highest KSI rate (0.19) — but these are predictive associations, not proven causes.
 - **Equity (two channels).** Severity given a crash is mildly lower in deprived areas, but with exposure the absolute KSI burden per vehicle‑mile is ~1.5× higher in the most‑deprived areas, driven by crash frequency, and persists across 2015–2024, so it is not a pandemic artefact.
+- **Access to care.** A fourth external source (DfT JTS0506) shows that, after full road-environment control, longer hospital drive-time independently raises KSI (OR 1.07; Figure 1) - a remoteness lever, separate from deprivation.
+
+![Figure 1](outputs/access_dose_response.png)
 - **Business meaning.** This answers the opening problem directly: public teams can rank fast‑rural contexts for severity‑reduction engineering and deprived / high‑exposure areas for frequency reduction, while insurers can read it as territorial bodily‑injury risk for loss‑prevention and fleet‑risk advice — both replacing raw counts with risk‑based triage.
 
 ## 6. Business insights and recommendations
 - **Insight.** Where serious harm concentrates depends on the question asked: raw density favours urban cores, but exposure‑adjusted burden reveals which areas bear disproportionate harm per mile — relevant to public prioritisation and insurer territorial risk awareness.
-- **Actions.** Public bodies should use it as a triage signal (not an automatic rule): prioritise high‑speed rural contexts for engineering/speed/lighting review and deprived/high‑exposure urban areas for traffic‑calming and vulnerable‑user protection, threshold set to review capacity. Insurers use the same ranking for loss‑prevention, fleet‑risk and reserving awareness — not pricing. Illustratively, of 10,000 contexts ~580 KSI‑risk cases are captured; at a 5% effect, ~29 KSI outcomes avoided.
+- **Actions.** Public bodies should use it as a triage signal (not an automatic rule): prioritise high-speed rural contexts for engineering/speed/lighting review and deprived/high-exposure urban areas for traffic-calming and vulnerable-user protection, threshold set to review capacity. Insurers use the same ranking for loss-prevention, fleet-risk and reserving awareness - not pricing. Illustratively, ~580 of 10,000 contexts are flagged (~29 KSI avoided at a 5% effect).
 - **Limitations.** Observational data (associations, not causal); exposure is motor‑vehicle only; deprivation is area‑level (ecological‑fallacy risk, reduced not eliminated by an LSOA check); performance suits prioritisation, not precise prediction.
 - **Future enhancements.** Adding road‑geometry, traffic‑flow and pedestrian/cyclist exposure, top‑k targeting, and intervention‑rollout data for quasi‑experimental estimates would strengthen it.
 
@@ -44,6 +47,7 @@
 - Department for Transport (2025) *Road Safety Data (STATS19)* [dataset]. GOV.UK.
 - Department for Transport (2024) *Road traffic statistics* [dataset]. GOV.UK.
 - Office for National Statistics (2017) *Local Authority District to County (2017) Lookup* [dataset]. ONS Open Geography Portal.
+- Department for Transport (2021) *Journey Time Statistics (JTS0506: travel time to nearest hospital)* [dataset]. GOV.UK.
 
 ---
 
