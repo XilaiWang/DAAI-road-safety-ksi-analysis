@@ -14,10 +14,10 @@
 
 ## 3. Data pre‑processing
 - **Cleaning.** STATS19 "unknown / out‑of‑range" sentinels were recoded to missing and kept as an explicit indicator (dummy encoding), so "unknown" is not treated as a real road category.
-- **Missing values and outliers.** Listwise deletion removed only the 1,154 rows (~0.4%) lacking core fields; their KSI rate (10.1%) was close to retained rows (14.3%), confirming negligible bias; imputation would invent crash‑scene conditions.
+- **Missing values and outliers.** Listwise deletion removed only 1,154 rows (~0.4%) lacking core fields; their lower KSI rate (10.1% vs 14.3%) is reported transparently, and because the removed share is very small the expected impact on the overall modelling sample is limited, while imputation would invent crash‑scene conditions.
 - **Duplicates and corruption.** Whole‑row de‑duplication was applied; the corrupted `Accident_Index` (36% mangled by Excel) was never used as a key.
 - **Feature engineering.** An hour‑of‑day feature was parsed from the separate `Time` field, nominal contexts were dummy‑encoded, and a VIF check (≈1.00) confirmed no multicollinearity among the numeric predictors.
-- **External data - what, why, how.** Four external sources were joined: IMD 2019 by authority name (MHCLG, 2019), DfT vehicle‑miles by ONS code via an ONS district→county lookup (DfT, 2024; ONS, 2017), multi‑year STATS19 2015–2024 (DfT, 2025), and DfT hospital drive‑times JTS0506 (DfT, 2021) - for equity, exposure‑adjustment and emergency‑care access; coverage was a transparent waterfall (88.3% England‑matched).
+- **External data - what, why, how.** Four external sources were used across the project: IMD 2019 by authority name (MHCLG, 2019), DfT vehicle‑miles by ONS code via an ONS district→county lookup (DfT, 2024; ONS, 2017), multi‑year STATS19 2015–2024 (DfT, 2025), and DfT hospital drive‑times JTS0506 (DfT, 2021) - for equity, exposure‑adjustment and emergency‑care access; coverage was a transparent waterfall (88.3% England‑matched).
 
 ## 4. Analysis
 - **Leakage control.** Post‑crash fields (severity, casualty/vehicle counts) and place‑memorising coordinates were excluded as unavailable when teams prioritise; their near‑chance AUCs (0.526 and 0.423) confirmed little predictive loss.
@@ -35,7 +35,7 @@
 
 ## 6. Business insights and recommendations
 - **Insight.** Where serious harm concentrates depends on the question asked: raw density favours urban cores, but exposure‑adjusted burden reveals which areas bear disproportionate harm per mile — though these per‑mile leaders are dense urban cores on a motor‑vehicle‑only denominator (a concentration signal, not a deprivation ranking) — relevant to public prioritisation and insurer territorial risk awareness.
-- **Actions.** Public bodies should use it as a triage signal (not an automatic rule): prioritise high-speed rural contexts for engineering/speed/lighting review and deprived/high-exposure urban areas for traffic-calming and vulnerable-user protection, threshold set to review capacity. Insurers use the same ranking for loss-prevention, fleet-risk and reserving awareness - not pricing. Illustratively, ~580 of 10,000 contexts are flagged (~29 KSI avoided at a 5% effect).
+- **Actions.** Public bodies should use it as a triage signal (not an automatic rule): prioritise high-speed rural contexts for engineering/speed/lighting review and high-exposure urban areas with elevated exposure-adjusted KSI burden for traffic-calming and vulnerable-user protection, threshold set to review capacity. Insurers use the same ranking for loss-prevention, fleet-risk and reserving awareness - not pricing. Illustratively, ~580 of 10,000 contexts are flagged (~29 KSI avoided at a 5% effect).
 - **Limitations.** Observational data (associations, not causal); exposure is motor‑vehicle only; deprivation is area‑level (ecological‑fallacy risk, reduced not eliminated by an LSOA check); performance suits prioritisation, not precise prediction.
 - **Future enhancements.** Adding road‑geometry, traffic‑flow and pedestrian/cyclist exposure, top‑k targeting, and intervention‑rollout data for quasi‑experimental estimates would strengthen it.
 
