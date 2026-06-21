@@ -7,8 +7,8 @@
 - **Stakeholders.** These span road‑safety partnerships and local‑authority highway teams (budgets/review queues), highway engineers and transport planners (delivery), motor/fleet insurers and risk managers (territorial risk awareness and loss‑prevention, not pricing), and budget/partnership holders — at the interface of public‑safety allocation and commercial road‑risk management.
 
 ## 2. Dataset
-- **Primary dataset.** The Kaggle "Road Accident Dataset" (xavierberge) holds 307,973 real GB STATS19‑style collision records (2021–22, 23 source variables).
-- **Why suitable.** It is large, genuinely collected (single‑feature AUCs 0.50–0.55 show no trivial separator — a sanity check, not proof of authenticity), and records pre‑existing road context (speed, road type, urban/rural, lighting, weather, junction, time) needed to characterise severity.
+- **Primary dataset.** The Kaggle "Road Accident Dataset" (xavierberge, n.d.) holds 307,973 real GB STATS19‑style collision records (2021–22, 23 source variables).
+- **Why suitable.** It is a large STATS19‑style collision dataset recording the pre‑existing road context (speed, road type, urban/rural, lighting, weather, junction, time) needed to characterise severity.
 - **Key variables.** The target is binary KSI (the official Department for Transport severity outcome); predictors are at‑scene road, environment and time fields; deprivation and traffic exposure are added externally (Section 3).
 - **Size.** The raw 307,973 records reduce to a 270,721‑row England‑matched modelling sample after cleaning.
 
@@ -17,7 +17,7 @@
 - **Missing values and outliers.** Listwise deletion removed only the 1,154 rows (~0.4%) lacking core fields; their KSI rate (10.1%) was close to retained rows (14.3%), confirming negligible bias; imputation would invent crash‑scene conditions.
 - **Duplicates and corruption.** Whole‑row de‑duplication was applied; the corrupted `Accident_Index` (36% mangled by Excel) was never used as a key.
 - **Feature engineering.** An hour‑of‑day feature was parsed from the separate `Time` field, nominal contexts were dummy‑encoded, and a VIF check (≈1.00) confirmed no multicollinearity among the numeric predictors.
-- **External data - what, why, how.** Four external sources were joined: IMD 2019 (by authority name), DfT vehicle-miles (by ONS code), multi-year STATS19 (2015-2024), and DfT hospital drive-times (JTS0506) - for equity, exposure-adjustment, and emergency-care access; coverage was a transparent waterfall (88.3% England-matched).
+- **External data - what, why, how.** Four external sources were joined: IMD 2019 by authority name (MHCLG, 2019), DfT vehicle‑miles by ONS code via an ONS district→county lookup (DfT, 2024; ONS, 2017), multi‑year STATS19 2015–2024 (DfT, 2025), and DfT hospital drive‑times JTS0506 (DfT, 2021) - for equity, exposure‑adjustment and emergency‑care access; coverage was a transparent waterfall (88.3% England‑matched).
 
 ## 4. Analysis
 - **Leakage control.** Post‑crash fields (severity, casualty/vehicle counts) and place‑memorising coordinates were excluded as unavailable when teams prioritise; their near‑chance AUCs (0.526 and 0.423) confirmed little predictive loss.
@@ -30,9 +30,7 @@
 - **Operating point.** At a 5:1 false‑negative:false‑positive cost the model recalls ~40% of KSI contexts (precision ~20%), rising to ~91% at 10:1 — a transparent budget lever.
 - **Severity drivers.** SHAP and both clusterings agree that high speed limits, rural settings and poor lighting raise predicted severity — a fast (~62 mph) rural cluster has the highest KSI rate (0.19) — but these are predictive associations, not proven causes.
 - **Equity (two channels).** Severity given a crash is mildly lower in deprived areas, but with exposure the absolute KSI burden per vehicle‑mile is broadly regressive (Q4/Q1 ≈ 1.5×, but peaking at Q3 — not strictly monotonic), driven by crash frequency and persisting across 2015–2024, so not a pandemic artefact.
-- **Access to care.** A fourth external source (DfT JTS0506) shows that, after full road-environment control, longer hospital drive-time independently raises KSI (OR 1.07, cluster‑robust 95% CI 1.05–1.10; Figure 1) - a remoteness lever, separate from deprivation.
-
-![Figure 1](outputs/access_dose_response.png)
+- **Access to care.** A fourth external source (DfT JTS0506; DfT, 2021) adds an access dimension: after selected road‑context controls (urban/rural, speed, road type), longer modelled hospital drive‑time remains weakly associated with KSI (OR 1.07, cluster‑robust 95% CI 1.05–1.10) — a residual remoteness/access pattern, not evidence that distance causes severity.
 - **Business meaning.** This answers the opening problem directly: public teams can rank fast‑rural contexts for severity‑reduction engineering and deprived / high‑exposure areas for frequency reduction, while insurers can read it as territorial bodily‑injury risk for loss‑prevention and fleet‑risk advice — both replacing raw counts with risk‑based triage.
 
 ## 6. Business insights and recommendations
@@ -43,7 +41,7 @@
 
 ## References
 - xavierberge (n.d.) *Road Accident Dataset* [dataset]. Kaggle. Available at: https://www.kaggle.com/datasets/xavierberge/road-accident-dataset
-- Ministry of Housing, Communities & Local Government (2019) *English Indices of Deprivation 2019* [dataset]. GOV.UK.
+- Ministry of Housing, Communities and Local Government (2019) *English Indices of Deprivation 2019* [dataset]. GOV.UK.
 - Department for Transport (2025) *Road Safety Data (STATS19)* [dataset]. GOV.UK.
 - Department for Transport (2024) *Road traffic statistics* [dataset]. GOV.UK.
 - Office for National Statistics (2017) *Local Authority District to County (2017) Lookup* [dataset]. ONS Open Geography Portal.
