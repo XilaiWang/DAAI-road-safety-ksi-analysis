@@ -1,9 +1,9 @@
 # Prioritising Serious Road‑Crash Risk: A Resource‑Allocation Tool for UK Road‑Safety Teams and Motor‑Insurance Risk Managers
 
 ## 1. Business problem
-- **The problem.** UK road‑safety teams and motor‑insurance risk managers share a resource‑allocation problem: local authorities must prioritise a limited Killed‑or‑Seriously‑Injured (KSI) prevention budget, while insurers must identify road contexts likely to generate high‑cost bodily‑injury exposure — and neither can review every context.
-- **Why it matters / real pain point.** KSI collisions impose large social costs on public bodies and high severe‑claim exposure on insurers, yet review capacity is limited, so misdirected effort wastes scarce resources and leaves preventable serious injuries unaddressed.
-- **Framed as analytics.** The project delivers a triage and ranking signal — not a real‑time crash predictor, an enforcement tool, an insurance‑pricing model, or a causal / DiD evaluation — to rank road contexts and areas for review, prevention, insurer loss‑prevention advice and public–private partnerships.
+- **The problem.** Road‑safety teams and insurers must prioritise limited Killed‑or‑Seriously‑Injured (KSI) budgets and review capacity toward serious‑injury contexts.
+- **Why it matters / real pain point.** KSI collisions impose social costs and severe‑claim exposure; misdirected reviews waste scarce resources and leave preventable harm unaddressed.
+- **Framed as analytics.** The project provides a triage signal — not real‑time prediction, pricing or causal evaluation — to rank contexts for review, prevention and loss‑prevention advice.
 - **Stakeholders.** These span road‑safety partnerships and local‑authority highway teams (budgets/review queues), highway engineers and transport planners (delivery), motor/fleet insurers and risk managers (territorial risk awareness and loss‑prevention, not pricing), and budget/partnership holders — at the interface of public‑safety allocation and commercial road‑risk management.
 
 ## 2. Dataset
@@ -16,7 +16,7 @@
 - **Cleaning.** STATS19 "unknown / out‑of‑range" sentinels were recoded to missing and kept as an explicit indicator (dummy encoding), so "unknown" is not treated as a real road category.
 - **Missing values and outliers.** Listwise deletion removed only 1,154 rows (~0.4%) lacking core fields; their lower KSI rate (10.1% vs 14.3%) is reported transparently, and because the removed share is very small the expected impact on the overall modelling sample is limited, while imputation would invent crash‑scene conditions.
 - **Duplicates and corruption.** Whole‑row de‑duplication was applied; the corrupted `Accident_Index` (36% mangled by Excel) was never used as a key.
-- **Feature engineering.** An hour‑of‑day feature was parsed from the separate `Time` field, nominal contexts were dummy‑encoded, and a VIF check (≈1.00) confirmed no multicollinearity among the numeric predictors.
+- **Feature engineering.** An hour‑of‑day feature was parsed from `Time` and nominal contexts were dummy‑encoded.
 - **External data - what, why, how.** Four external sources were used across the project: IMD 2019 by authority name (MHCLG, 2019), DfT vehicle‑miles by ONS code via an ONS district→county lookup (DfT, 2024; ONS, 2017), multi‑year STATS19 2015–2024 (DfT, 2025), and DfT hospital drive‑times JTS0506 (DfT, 2021) - for equity, exposure‑adjustment and emergency‑care access; coverage was a transparent waterfall (88.3% England‑matched).
 
 ## 4. Analysis
@@ -40,12 +40,12 @@
 - **Future enhancements.** Adding road‑geometry, traffic‑flow and pedestrian/cyclist exposure, top‑k targeting, and intervention‑rollout data for quasi‑experimental estimates would strengthen it.
 
 ## References
-- xavierberge (n.d.) *Road Accident Dataset* [dataset]. Kaggle. Available at: https://www.kaggle.com/datasets/xavierberge/road-accident-dataset
-- Ministry of Housing, Communities and Local Government (2019) *English Indices of Deprivation 2019* [dataset]. GOV.UK.
-- Department for Transport (2025) *Road Safety Data (STATS19)* [dataset]. GOV.UK.
-- Department for Transport (2024) *Road traffic statistics* [dataset]. GOV.UK.
-- Office for National Statistics (2017) *Local Authority District to County (2017) Lookup* [dataset]. ONS Open Geography Portal.
-- Department for Transport (2021) *Journey Time Statistics (JTS0506: travel time to nearest hospital)* [dataset]. GOV.UK.
+- Department for Transport (2021) 'Journey Time Statistics (JTS0506: travel time to nearest hospital)'. Available at: https://www.gov.uk/government/statistical-data-sets/journey-time-statistics-data-tables-jts (Accessed: 21 June 2026).
+- Department for Transport (2024) 'Road traffic statistics'. Available at: https://roadtraffic.dft.gov.uk/downloads (Accessed: 21 June 2026).
+- Department for Transport (2025) 'Road Safety Data (STATS19)'. Available at: https://www.gov.uk/government/statistics/road-safety-data (Accessed: 21 June 2026).
+- Ministry of Housing, Communities and Local Government (2019) 'English Indices of Deprivation 2019'. Available at: https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019 (Accessed: 21 June 2026).
+- Office for National Statistics (2017) 'Local Authority District to County (2017) Lookup'. Available at: https://geoportal.statistics.gov.uk/ (Accessed: 21 June 2026).
+- xavierberge (n.d.) 'Road Accident Dataset'. Available at: https://www.kaggle.com/datasets/xavierberge/road-accident-dataset (Accessed: 21 June 2026).
 
 ---
 
