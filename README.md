@@ -6,8 +6,8 @@
 
 ## ▶ Open in Colab (one‑click run)
 Click the badge above. On Colab a setup cell fetches this repo (code + bundled `data/`) and installs `requirements.txt`, then the notebook runs top‑to‑bottom.
-- **Public repo:** one‑click for anyone.
-- **Private repo (current):** you are prompted once for a GitHub token (read access) to clone it — hidden input, never stored or committed. First enable *Colab → File → Open notebook → GitHub → Include private repositories*.
+- **Public repo (current):** one‑click for anyone.
+- **Private repo:** you are prompted once for a GitHub token (read access) to clone it — hidden input, never stored or committed. First enable *Colab → File → Open notebook → GitHub → Include private repositories*.
 
 ## Run locally
 1. Python ≥ 3.10; `pip install -r requirements.txt`.
